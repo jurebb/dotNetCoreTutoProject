@@ -14,12 +14,15 @@ namespace TheWorld
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
+        //meth which sets up service containers, container for services that diff. parts  of thos app require
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)       //meth - what to do when requests come in (every time), middleware
+        //meth - what to do when requests come in (every time), middleware
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
 
@@ -27,9 +30,16 @@ namespace TheWorld
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseDefaultFiles();      //trazit ce index.html
             app.UseStaticFiles();
+
+            app.UseMvc(config =>
+            {
+                config.MapRoute(
+                    name: "Default",
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "App", action = "Index" }
+                    );
+            });
         }
     }
 }
