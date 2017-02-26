@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TheWorld.Services;
+using TheWorld.Models;
 
 namespace TheWorld
 {
@@ -45,6 +46,7 @@ namespace TheWorld
                 //implement real mail service
             }
             services.AddMvc();
+            services.AddDbContext<WorldContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

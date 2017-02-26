@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TheWorld.ViewModels;
 using TheWorld.Services;
 using Microsoft.Extensions.Configuration;
+using TheWorld.Models;
 
 namespace TheWorld.Controllers.Web
 {
@@ -14,16 +15,19 @@ namespace TheWorld.Controllers.Web
     {
         private IMailService _mailService;
         private IConfigurationRoot _config;
+        private WorldContext _context;
 
-        public AppController(IMailService mailService, IConfigurationRoot config)     //config da dobavimo adresu za Contact() akvciju iz config jsona ili env var 8Startup.cs)
+        public AppController(IMailService mailService, IConfigurationRoot config, WorldContext context)     //config da dobavimo adresu za Contact() akvciju iz config jsona ili env var 8Startup.cs)
         {
             _mailService = mailService;
             _config = config;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var data = _context.Trips.ToList();
+            return View(data);
         }
 
         public IActionResult Contact()

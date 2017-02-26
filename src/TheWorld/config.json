@@ -1,5 +1,8 @@
 ﻿{
   "MailSettings": {
     "ToMail": "jurebb3@opr.com"
+  },
+  "SqlConnectionString": {
+    "String": ""
   }
 }
