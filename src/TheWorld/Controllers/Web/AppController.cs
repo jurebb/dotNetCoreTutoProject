@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using TheWorld.ViewModels;
 using TheWorld.Services;
 using Microsoft.Extensions.Configuration;
+using TheWorld.Models;
+using Microsoft.Extensions.Logging;
 
 namespace TheWorld.Controllers.Web
 {
@@ -14,16 +16,29 @@ namespace TheWorld.Controllers.Web
     {
         private IMailService _mailService;
         private IConfigurationRoot _config;
+        private IWorldRepository _repository;
+        private ILogger<AppController> _logger;
 
-        public AppController(IMailService mailService, IConfigurationRoot config)     //config da dobavimo adresu za Contact() akvciju iz config jsona ili env var 8Startup.cs)
+        public AppController(IMailService mailService, IConfigurationRoot config, IWorldRepository repository, ILogger<AppController> logger)     //config da dobavimo adresu za Contact() akvciju iz config jsona ili env var 8Startup.cs)
         {
             _mailService = mailService;
             _config = config;
+            _repository = repository;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                var data = _repository.GetAllTrips();
+                return View(data);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error getting data for index: {ex.Message}");
+                return Redirect("/error");
+            }
         }
 
         public IActionResult Contact()
