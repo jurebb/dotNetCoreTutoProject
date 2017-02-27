@@ -50,7 +50,11 @@ namespace TheWorld
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddTransient<WorldContextSeedData>();
-            services.AddMvc();
+            services.AddMvc()/*.
+                AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();          //MVC now uses camel case by default
+                })*/;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
