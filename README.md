@@ -10,3 +10,6 @@ following a pluralsight (shawnwildermuth) tutorial
   -run the following commands in cmd in the project root (TheWorld>): 
                                                                 -dotnet ef migrations add InitialDatabase
                                                                 -dotnet ef database update
+
+additional notes:
+-Disable launch URL in project properties if you want to use postman
