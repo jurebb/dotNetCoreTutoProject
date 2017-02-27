@@ -24,12 +24,10 @@
         <h2>The Map</h2>
 
         <ul>
-            @{
-                foreach (var trip in Model)
+                @foreach (var trip in Model)
                 {
-                    <li>trip.Name</li>
+                    <li>@trip.Name : @trip.DateCreated.ToString("d")</li>
                 }
-            }
         </ul>
 
     </div>

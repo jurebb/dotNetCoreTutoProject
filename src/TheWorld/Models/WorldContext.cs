@@ -19,7 +19,7 @@ namespace TheWorld.Models
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(_config["SqlConnectionString"]);
+            optionsBuilder.UseSqlServer(_config["SqlConnectionString:String"]);
         }
 
         public DbSet<Trip> Trips { get; set; }
