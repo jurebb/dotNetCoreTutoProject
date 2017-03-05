@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TheWorld.Models;
+using TheWorld.Services;
 using TheWorld.ViewModels;
 
 namespace TheWorld.Controllers.Api
@@ -16,11 +17,13 @@ namespace TheWorld.Controllers.Api
     {
         private ILogger<StopsController> _logger;
         private IWorldRepository _repository;
+        private ShamGeoService _service;
 
-        public StopsController(ILogger<StopsController> logger, IWorldRepository repository)
+        public StopsController(ILogger<StopsController> logger, IWorldRepository repository, ShamGeoService service)
         {
             _logger = logger;
             _repository = repository;
+            _service = service;
         }
 
         [HttpGet("")]
@@ -49,11 +52,21 @@ namespace TheWorld.Controllers.Api
                     var stop = Mapper.Map<Stop>(stopVM);
 
                     //longitude i latitude
-
-                    _repository.AddStopToTrip(stop, tripName);
-                    if(await _repository.SaveChangesAsync())
+                    var location = await _service.DetermineLocation(stop);
+                    if (!location.Result)
                     {
-                        return Created($"api/trips/{tripName}/stops/{stop.Name}", Mapper.Map<StopsViewModel>(stop));
+                        _logger.LogError("could not determine long/lat");
+                    }
+                    else
+                    {
+                        stop.Latitude = location.Latitude;
+                        stop.Longitude = location.Longitude;
+
+                        _repository.AddStopToTrip(stop, tripName);
+                        if (await _repository.SaveChangesAsync())
+                        {
+                            return Created($"api/trips/{tripName}/stops/{stop.Name}", Mapper.Map<StopsViewModel>(stop));
+                        }
                     }
                 }
             }
