@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TheWorld.Services;
 using TheWorld.Models;
+using AutoMapper;
+using TheWorld.ViewModels;
 
 namespace TheWorld
 {
@@ -50,13 +52,24 @@ namespace TheWorld
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
             services.AddTransient<WorldContextSeedData>();
-            services.AddMvc();
+            services.AddTransient<ShamGeoService>();
+            services.AddMvc()/*.
+                AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();          //MVC now uses camel case by default
+                })*/;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         //meth - what to do when requests come in (every time), middleware
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, WorldContextSeedData seeder)
         {
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<TripsViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopsViewModel, Stop>().ReverseMap();
+            });
+
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment())
