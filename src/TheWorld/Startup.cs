@@ -66,6 +66,7 @@ namespace TheWorld
             Mapper.Initialize(config =>
             {
                 config.CreateMap<TripsViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopsViewModel, Stop>().ReverseMap();
             });
 
             loggerFactory.AddConsole();
