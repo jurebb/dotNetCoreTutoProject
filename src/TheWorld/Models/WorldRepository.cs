@@ -44,7 +44,7 @@ namespace TheWorld.Models
             var trip = GetTripByName(tripName);
             if(trip!=null)
             {
-                _context.Stops.Add(stop);
+                _context.Stops.Add(stop);       //todo redundant?
                 trip.Stops.Add(stop);
             }
         }
