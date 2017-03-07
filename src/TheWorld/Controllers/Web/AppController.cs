@@ -9,6 +9,7 @@ using TheWorld.Services;
 using Microsoft.Extensions.Configuration;
 using TheWorld.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TheWorld.Controllers.Web
 {
@@ -28,6 +29,14 @@ namespace TheWorld.Controllers.Web
         }
 
         public IActionResult Index()
+        {
+            //todo if authenticated ?here
+            return View();
+            //todo else redirect ?here
+        }
+
+        [Authorize]
+        public IActionResult Trips()
         {
             try
             {

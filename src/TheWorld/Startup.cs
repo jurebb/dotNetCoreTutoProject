@@ -12,6 +12,7 @@ using TheWorld.Services;
 using TheWorld.Models;
 using AutoMapper;
 using TheWorld.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace TheWorld
 {
@@ -48,6 +49,14 @@ namespace TheWorld
                 //implement real mail service
             }
 
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredLength = 8;
+                config.User.RequireUniqueEmail = true;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+            })
+                .AddEntityFrameworkStores<WorldContext>();
+
             services.AddLogging();
             services.AddDbContext<WorldContext>();
             services.AddScoped<IWorldRepository, WorldRepository>();
@@ -72,6 +81,7 @@ namespace TheWorld
 
             loggerFactory.AddConsole();
 
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -82,6 +92,8 @@ namespace TheWorld
                 loggerFactory.AddDebug(LogLevel.Error);
             }
             app.UseStaticFiles();
+
+            app.UseIdentity();
 
             app.UseMvc(config =>
             {
