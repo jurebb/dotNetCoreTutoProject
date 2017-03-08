@@ -30,9 +30,7 @@ namespace TheWorld.Controllers.Web
 
         public IActionResult Index()
         {
-            //todo if authenticated ?here
             return View();
-            //todo else redirect ?here
         }
 
         [Authorize]
